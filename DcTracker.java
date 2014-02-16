@@ -2084,9 +2084,7 @@ public final class DcTracker extends DcTrackerBase {
         mAllApnSettings = new ArrayList<ApnSetting>();
         IccRecords r = mIccRecords.get();
         String homeOperator = "";
-        if (isNvSubscription()){
             homeOperator = SystemProperties.get("ro.cdma.home.operator.numeric");
-        }
         String operator = (r != null) ? r.getOperatorNumeric() : homeOperator;
         if (operator != null) {
             String selection = "numeric = '" + operator + "'";
@@ -2173,9 +2171,7 @@ public final class DcTracker extends DcTrackerBase {
 
         IccRecords r = mIccRecords.get();
         String homeOperator = "";
-        if (isNvSubscription()){
             homeOperator = SystemProperties.get("ro.cdma.home.operator.numeric");
-        }
         String operator = (r != null) ? r.getOperatorNumeric() : homeOperator;
 
         // This is a workaround for a bug (7305641) where we don't failover to other
