@@ -153,7 +153,8 @@ public final class DcTracker extends DcTrackerBase {
 
         mDataConnectionTracker = this;
 
-		if (DBG) log("Initial prod at APN to set without user intervention beginning.");
+		if (!runOnce) {
+			if (DBG) log("Initial prod at APN to set without user intervention beginning.");
 		/*kanged from onApnChanged*/
         DctConstants.State overallState = getOverallState();
         boolean isDisconnected = (overallState == DctConstants.State.IDLE ||
@@ -210,7 +211,7 @@ public final class DcTracker extends DcTrackerBase {
 /*end kang*/
 		runOnce = true;
 		if (DBG) log("Initial prod at APN to set without user intervention complete.");
-
+		}
         mApnObserver = new ApnChangeObserver();
         p.getContext().getContentResolver().registerContentObserver(
                 Telephony.Carriers.CONTENT_URI, true, mApnObserver);
@@ -2084,7 +2085,9 @@ public final class DcTracker extends DcTrackerBase {
         mAllApnSettings = new ArrayList<ApnSetting>();
         IccRecords r = mIccRecords.get();
         String homeOperator = "";
+        if (isNvSubscription()){
             homeOperator = SystemProperties.get("ro.cdma.home.operator.numeric");
+        }
         String operator = (r != null) ? r.getOperatorNumeric() : homeOperator;
         if (operator != null) {
             String selection = "numeric = '" + operator + "'";
@@ -2171,7 +2174,9 @@ public final class DcTracker extends DcTrackerBase {
 
         IccRecords r = mIccRecords.get();
         String homeOperator = "";
+        if (isNvSubscription()){
             homeOperator = SystemProperties.get("ro.cdma.home.operator.numeric");
+        }
         String operator = (r != null) ? r.getOperatorNumeric() : homeOperator;
 
         // This is a workaround for a bug (7305641) where we don't failover to other
